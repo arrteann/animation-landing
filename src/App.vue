@@ -1,30 +1,59 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+  <PreLoader v-if="showPreLoad" />
+  <Navbar />
+  <transition
+    mode="in-out"
+    enter-active-class="animate__animated animate__backInUp"
+    leave-active-class="animate__animated animate__backInUp"
+    appear
+  >
+    <router-view v-if="!showPreLoad" />
+  </transition>
 </template>
+<script lang="ts">
+import Navbar from "@/components/Navbar.vue";
+import PreLoader from "@/components/PreLoader.vue";
+import { Options, Vue } from "vue-class-component";
+@Options({
+  name: "App",
+  components: {
+    Navbar,
+    PreLoader,
+  },
+})
+export default class App extends Vue {
+  showPreLoad = true;
 
+  togglePreLoad() {
+    setTimeout(() => {
+      this.showPreLoad = false;
+    }, 1500);
+  }
+
+  mounted() {
+    this.togglePreLoad();
+  }
+}
+</script>
 <style lang="scss">
+* {
+  margin: 0rem;
+  padding: 0rem;
+  box-sizing: border-box;
+  font-family: "Vazir";
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+body {
+  background: #fcfcfc;
+}
+a {
+  text-decoration: none;
 }
 </style>
